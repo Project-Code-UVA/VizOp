@@ -41,7 +41,7 @@
 
 ## Virtual Environments + Package Management
 
-**Virtual envs do NOT get committed/pushed to the remote repo. Make sure the virtual env (`env/`) on your local machine is included in the `.gitignore` file.**
+**Virtual envs do NOT get committed/pushed to the remote repository. Make sure the virtual env (`env/`) on your local machine is included in the `.gitignore` file.**
 
 ### 1. Create a virtual env on your local machine in the project root folder (`/VizOp`) with:
 
@@ -49,7 +49,7 @@
 -    Linux/Mac: `python -m venv env`
 
 
-### 2. Activate the virtual env with:
+### 2. Activate the virtual env:
 
 -   Windows: `.\env\Scripts\Activate.ps1`
 -   Linux/Mac: `source ./env/bin/activate`
@@ -60,7 +60,8 @@
 `pip install -r requirements.txt`
 
 
-### 4. If you install any additional packages while implementing a feature, install (if you have already) and run the `pipreqs` command in the project root folder to generate a `requirements.txt` file. This will list all of the project's dependencies.
+### 4. Update requirements.txt dependency list:
+-   If you install any additional packages while implementing a feature, install (if you have not already) and run the `pipreqs` command in the project root folder to generate a `requirements.txt` file that lists all of the projects dependencies
 
     pip install pipreqs
     pipreqs /path/to/project/root
@@ -80,14 +81,14 @@
 
 -   You can create a new React app using the `create-react-app` command-line tool, which sets up a new React project with all the necessary files and configurations. Open your terminal and run the following command to create a new React app:
 
--   `npx create-react-app my-react-app-name`
+    `npx create-react-app my-react-app-name`
 
 
 ### 3. Navigate to Your Project Directory
 
 -   Change your working directory to the newly created project folder:
 
-    `cd my-react-app-name`
+        cd my-react-app-name
 
 
 ### 4. Start Your React Development Server
