@@ -1,12 +1,16 @@
-import requests
+import requests, format_date
+
 
 url = "https://api.marketdata.app/v1/options/quotes/AAPL250117C00150000/"
 
 response = requests.request("GET", url)
 data = response.json()
 
+strike = data['strike'][0]
 print("Option Contract: %s" % data["optionSymbol"][0])
+print(format_date.epoch_to_datetime(data['expiration'][0]))
 print(data)
+
 
 # -- Assignment -- #
 # 1. Get the Ticker and current price of Ticker. URL: https://api.marketdata.app/v1/stocks/quotes/AAPL/
