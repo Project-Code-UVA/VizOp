@@ -6,10 +6,6 @@ url = "https://api.marketdata.app/v1/options/quotes/AAPL250117C00150000/"
 response = requests.request("GET", url)
 data = response.json()
 
-strike = data['strike'][0]
-print("Option Contract: %s" % data["optionSymbol"][0])
-print(format_date.epoch_to_datetime(data['expiration'][0]))
-print(data)
 
 
 # -- Assignment -- #
@@ -33,27 +29,33 @@ response = requests.get(url)
 
 if response.status_code == 200:
     data = response.json()
+    if data.get("s") == "ok":    # Check if the response is valid based on the 's' field in JSON
 
-    # Get the option type (call or put) from the 'side' field in JSON
-    option_type = data["side"][0]
+        option_type = data["side"][0] # Call or Put
+        strike = data['strike'][0] # Strike price of contract
+        print("Option Contract: %s" % data["optionSymbol"][0])
+        print(format_date.epoch_to_datetime(data['expiration'][0]))
+        print("Strike: %s" % strike)
 
-    # Retrieve the greek values from the JSON
-    greeks = {
-        "delta": data["delta"][0],
-        "gamma": data["gamma"][0],
-        "theta": data["theta"][0],
-        "vega": data["vega"][0],
-        "rho": data["rho"][0]
-    }
+        greeks = { # Delta, Gamma, Theta, Vega, Rho
+            "delta": data["delta"][0],
+            "gamma": data["gamma"][0],
+            "theta": data["theta"][0],
+            "vega": data["vega"][0],
+            "rho": data["rho"][0]
+        }
 
-    # Check if the response is valid based on the 's' field in JSON
-    if data.get("s") == "ok":
         print(f"Option Type: {option_type}")
         print("Greek Values:")
         for key, value in greeks.items():
             print(f"{key}: {value}")
+
+        print("Raw JSON Data:")
+        print(data)
+
     else:
         print("Invalid response.")
+    
 else:
     print("Failed to retrieve data. Status code:", response.status_code)
 
