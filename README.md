@@ -88,7 +88,7 @@
 
 -   Change your working directory to the newly created project folder:
 
-        cd my-react-app-name
+    `cd my-react-app-name`
 
 
 ### 4. Start Your React Development Server
