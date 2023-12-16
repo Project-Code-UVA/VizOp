@@ -54,4 +54,26 @@ if response.status_code == 200:
 else:
     print("Failed to retrieve data. Status code:", response.status_code)
 
+price_range = (mdPrice - mdPrice * 0.1, mdPrice + mdPrice * 0.1)
+delta = greeks['delta'] 
+gamma = greeks['theta']
+buy_premium = data['bid'][0]
 
+
+#calculation premiums for call options
+end_premiums = []
+for end_price in range(int(price_range[0]), int(price_range[1])):
+    end_price = round(end_price / 100, 2)
+    change_in_price = end_price - mdPrice
+    change_in_premium = change_in_price * delta + 0.5 * gamma * (change_in_price ** 2)
+    end_premiums.append(change_in_premium + buy_premium)
+
+print(end_premiums)
+
+import matplotlib.pyplot as plt
+
+plt.plot(range(mdPrice, price_range[1], 0.01), end_premiums)
+plt.title(data["optionSymbol"][0])
+plt.xlabel('Price Range')
+plt.ylabel('End Premiums')
+plt.show()
