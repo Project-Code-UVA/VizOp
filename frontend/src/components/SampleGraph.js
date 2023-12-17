@@ -26,7 +26,7 @@ class SampleGraph extends Component {
         y: [200.1,200.03,199.83,199.87,199.32,202.0,202.0,202.21,196.33,198.47,197.97,196.48,196.12,195.31,195.31,196.28,196.18],
         mode: 'markers',
         type: 'scatter',
-      }
+      };
 
       this.setState({ dummyData });
     });
@@ -40,7 +40,8 @@ class SampleGraph extends Component {
         <Plot data={[dummyData]} layout={{ title: 'AAPL Option Strike Price vs. Stock Price' }} />
       </div>
     );
-  }  
+  }
+    
 }
 
 export default SampleGraph;

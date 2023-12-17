@@ -2,5 +2,23 @@
   "dependencies": {
     "plotly.js": "^2.26.2",
     "react-plotly.js": "^2.6.0"
-  }
+  },
+  "name": "vizop",
+  "description": "**Always do work and run the development server in your virtual environment**",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node frontend/src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Project-Code-UVA/VizOp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Project-Code-UVA/VizOp/issues"
+  },
+  "homepage": "https://github.com/Project-Code-UVA/VizOp#readme"
 }
