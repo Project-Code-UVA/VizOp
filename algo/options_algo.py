@@ -11,12 +11,23 @@ def calc_chg_prem_delta(option_spot, delta, gamma, new_spot):
 
 def calc_chg_prem_theta(date, theta, new_date):
     # calcualte change in date if date object
-    time_chg = (new_date - date).days
+    time_chg = (new_date - date).total_seconds() / 86400
     prem_chg = -1*(time_chg * theta)
     return prem_chg
 
 # Test
-test1 = True
+def generate_data(premium, delta, gamma, theta, date, spot):
+    x = []
+    y = []
+    z = []
+    for time in np.arange(1, 6, 0.25):
+        for new_spot in np.arange(spot - spot * 0.1, spot + spot * 0.1, 0.1):
+            x.append(time)
+            y.append(new_spot)
+            z.append(premium + calc_chg_prem_delta(spot, delta, gamma, new_spot) + calc_chg_prem_theta(date, theta, date + pd.Timedelta(days=time)))
+    return x, y, z
+
+test1 = False
 if test1:
     opt_prem = 3.5
     opt_strike = 50
