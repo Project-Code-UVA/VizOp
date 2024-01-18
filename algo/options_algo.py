@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import scipy.stats
-import math
 
 # Strategy #1
 # Use modify current premium based on current greeks
@@ -16,44 +15,21 @@ def calc_chg_prem_theta(date, theta, new_date):
     return prem_chg
 
 # Test
-def generate_data(premium, delta, gamma, theta, date, spot):
+def generate_data(premium, delta, gamma, theta, exp_date, spot):
     x = []
     y = []
     z = []
-    for time in np.arange(1, 6, 0.25):
+    today = pd.Timestamp.now()
+    exp_date = pd.Timestamp(exp_date)
+    time_chg = (exp_date - today).days
+    for dt in np.arange(0, time_chg, 0.25):
         for new_spot in np.arange(spot - spot * 0.1, spot + spot * 0.1, 0.1):
-            x.append(time)
+            x.append(dt)
             y.append(new_spot)
-            z.append(premium + calc_chg_prem_delta(spot, delta, gamma, new_spot) + calc_chg_prem_theta(date, theta, date + pd.Timedelta(days=time)))
-    return x, y, z
-
-test1 = False
-if test1:
-    opt_prem = 3.5
-    opt_strike = 50
-    opt_spot = 50
-    delta = 0.6
-    gamma = 0.25
-    new_spot = 51
-    new_date = pd.Timestamp('2023-01-02')
-    date = pd.Timestamp('2023-01-01')
-    theta = 0.25
-
-    # print(opt_prem)
-    # print("premium after increase in $1 spot:\n" + str(opt_prem + calc_chg_prem_delta(opt_spot, delta, gamma, new_spot)))
-    # print("premium after 1 day:\n" + str(opt_prem + calc_chg_prem_theta(date, theta, new_date)))
-    # print("new premium after 1 day, +$1 change:\n" + str(opt_prem + calc_chg_prem_delta(opt_spot, delta, gamma, new_spot) + calc_chg_prem_theta(date, theta, new_date)))
+            z.append(premium + calc_chg_prem_delta(spot, delta, gamma, new_spot) + calc_chg_prem_theta(today, theta, today + pd.Timedelta(days=dt)))
+    
     import matplotlib.pyplot as plt
     from mpl_toolkits.mplot3d import Axes3D
-
-    x = []
-    y = []
-    z = []
-    for time in np.arange(1, 6, 0.25):
-        for new_spot in np.arange(47, 53.1, 0.1):
-            x.append(time)
-            y.append(new_spot)
-            z.append(opt_prem + calc_chg_prem_delta(opt_spot, delta, gamma, new_spot) + calc_chg_prem_theta(date, theta, date + pd.Timedelta(days=time)))
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
@@ -62,9 +38,53 @@ if test1:
     ax.set_xlabel('Time')
     ax.set_ylabel('Price')
     ax.set_zlabel('New Premium')
-    # Draw plane representing original price of options contract
 
     plt.show()
+
+    return x, y, z
+
+test1 = 0
+if test1:
+    opt_prem = 3.5
+    opt_strike = 50
+    opt_spot = 50
+    delta = 0.6
+    gamma = 0.25
+    new_spot = 51
+    exp_date = pd.Timestamp('2024-01-11')
+    theta = 0.25
+
+    t, s, p = generate_data(opt_prem, delta, gamma, theta, exp_date, opt_spot)
+    print(t)
+    print(s)
+    print(p)    
+
+    # # print(opt_prem)
+    # # print("premium after increase in $1 spot:\n" + str(opt_prem + calc_chg_prem_delta(opt_spot, delta, gamma, new_spot)))
+    # # print("premium after 1 day:\n" + str(opt_prem + calc_chg_prem_theta(date, theta, new_date)))
+    # # print("new premium after 1 day, +$1 change:\n" + str(opt_prem + calc_chg_prem_delta(opt_spot, delta, gamma, new_spot) + calc_chg_prem_theta(date, theta, new_date)))
+    # import matplotlib.pyplot as plt
+    # from mpl_toolkits.mplot3d import Axes3D
+
+    # x = []
+    # y = []
+    # z = []
+    # for time in np.arange(1, 6, 0.25):
+    #     for new_spot in np.arange(47, 53.1, 0.1):
+    #         x.append(time)
+    #         y.append(new_spot)
+    #         z.append(opt_prem + calc_chg_prem_delta(opt_spot, delta, gamma, new_spot) + calc_chg_prem_theta(date, theta, date + pd.Timedelta(days=time)))
+
+    # fig = plt.figure()
+    # ax = fig.add_subplot(111, projection='3d')
+    # ax.scatter(x, y, z, c=z, cmap='viridis')
+
+    # ax.set_xlabel('Time')
+    # ax.set_ylabel('Price')
+    # ax.set_zlabel('New Premium')
+    # # Draw plane representing original price of options contract
+
+    # plt.show()
 
 # Strategy #2
 #  Using Black-Scholes to derive greek distributions and price premium
