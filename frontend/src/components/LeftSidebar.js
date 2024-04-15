@@ -1,8 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import './LeftSidebar.css';
+import Button from "react-bootstrap/Button";
 
 function LeftSidebar({setGraphData}) {
-
   const [ticker, setTicker] = useState('');
   const [optionType, setOptionType] = useState('');
   const [expiration, setExpiration] = useState('');
@@ -98,12 +98,12 @@ function LeftSidebar({setGraphData}) {
   }, [ticker, optionType, expiration, strike]);
 
   return (
-    <div className="left-sidebar">
-
+    
+    <div className="left-sidebar"  class = "bg-light">
       <div className="ticker-container">
         <div className="ticker-label-container">
           <input type="text" id="ticker" name="ticker" placeholder="Enter ticker" onChange={handleTickerChange}/>
-          <button className="submit-button" onClick={handleLoadChainClick}>Load Chain</button>
+          <button className="submit-button" class = "badge-pill" onClick={handleLoadChainClick}>Load Chain</button>
         </div>
 
         <div className="side-container">
@@ -115,15 +115,15 @@ function LeftSidebar({setGraphData}) {
       <div className="exp-strike-container">
 
         <div className="expiration-container">
-          <label id="expiration-label">Expiration</label>
-          <select id="expiration-dropdown" name="expiration" onChange={handleExpirationChange}>
+          <label id="expiration-label" class="display-3">Expiration</label>
+          <select class = "form-select" aria-label="Default select example" id="expiration-dropdown" name="expiration" onChange={handleExpirationChange}>
             {expirations.map((expiration, index) => <option key={index} value={expiration}>{expiration}</option>)}
           </select>
         </div>
 
         <div className="strike-container">
-          <label id="strike-label">Strike</label>
-          <select id="strike-dropdown" name="strike" onChange={handleStrikeChange}>
+          <label id="strike-label" class="display-3">Strike</label>
+          <select class = "form-select" aria-label="Default select example" id="strike-dropdown" name="strike" onChange={handleStrikeChange}>
             {strikes.map((strike, index) => <option key={index} value={strike}>{strike}</option>)}
           </select>
         </div>
@@ -131,7 +131,7 @@ function LeftSidebar({setGraphData}) {
       </div>
 
       <div className="load-graph-container">
-        <button className="load-graph-button" onClick={handleLoadGraphClick}>Load Graph</button>
+        <h2><button type = "button" className="load-graph-button" class = "btn btn-light btn-outline-dark btn-lg" onClick={handleLoadGraphClick}>Load Graph</button></h2>
       </div>
 
     </div>

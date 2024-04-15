@@ -15,9 +15,14 @@
 }
 
 .project-name {
-  padding-left: 2vw;
+  padding-left: 3vw;
+  padding-top: 3vw;
+  font-family: 'Gill Sans';
 } 
-
+.display-6 {
+  padding-left: 2vw;
+  padding-top: 1.5vw;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

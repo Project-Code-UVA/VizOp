@@ -4,7 +4,7 @@ import Plot from 'react-plotly.js';
 class SampleGraph extends React.Component {
   render() {
     return (
-      <div className="sample-graph">
+      <div className="sample-graph" id="words">
         <Plot
           data={[{
             x: [1, 2, 3],
