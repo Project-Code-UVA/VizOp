@@ -1,31 +1,27 @@
-import requests, format_date
+import requests, format_date, yfinance as yf
+import options_algo
+import pandas as pd
 
+#compare prices of ticker from yfinance and MarketData
+## !--- NEED TO GET TOKEN FOR TICKERS OTHER THAN AAPL ---! ##
 
+tickers = ['AAPL'] 
+
+for ticker in tickers:
+    # Get price and ticker from MarketData
+    live_price_url = 'https://api.marketdata.app/v1/stocks/quotes/' + ticker
+    # mdQuote = requests.get(live_price_url, headers = {'Authorization' : 'Bearer ' + open('mdToken.txt', 'r').read()}).json()
+    # print(f'\nTicker: {mdQuote["symbol"][0]}')
+    # mdPrice = mdQuote["last"][0]
+
+    response = requests.request("GET", live_price_url)
+    mdPrice = response.json()['ask'][0]
+
+#Get option contract data
 url = "https://api.marketdata.app/v1/options/quotes/AAPL250117C00150000/"
 
 response = requests.request("GET", url)
 data = response.json()
-
-
-
-# -- Assignment -- #
-# 1. Get the Ticker and current price of Ticker. URL: https://api.marketdata.app/v1/stocks/quotes/AAPL/
-#   - Compare price from JSON and stock quotes API to real time price. May need to get live price from other API (alphavantage)
-# 2. Get the Strike. Rule is to divide by 1000
-# 3. Get the Expiration Date in the format: January 01, 2000
-
-
-# 4. Get the Option Type (Call or Put)
-# 5. Get Delta, Gamma, and Theta
-# 6. Implement check for response code 200
-
-# Code for #4, #5, #6
-
-import requests  
-
-url = "https://api.marketdata.app/v1/options/quotes/AAPL250117C00150000/"
-
-response = requests.get(url)
 
 if response.status_code == 200:
     data = response.json()
@@ -33,9 +29,6 @@ if response.status_code == 200:
 
         option_type = data["side"][0] # Call or Put
         strike = data['strike'][0] # Strike price of contract
-        print("Option Contract: %s" % data["optionSymbol"][0])
-        print(format_date.epoch_to_datetime(data['expiration'][0]))
-        print("Strike: %s" % strike)
 
         greeks = { # Delta, Gamma, Theta, Vega, Rho
             "delta": data["delta"][0],
@@ -44,11 +37,6 @@ if response.status_code == 200:
             "vega": data["vega"][0],
             "rho": data["rho"][0]
         }
-
-        print(f"Option Type: {option_type}")
-        print("Greek Values:")
-        for key, value in greeks.items():
-            print(f"{key}: {value}")
 
         print("Raw JSON Data:")
         print(data)
@@ -59,4 +47,30 @@ if response.status_code == 200:
 else:
     print("Failed to retrieve data. Status code:", response.status_code)
 
+# price_range = (mdPrice - mdPrice * 0.1, mdPrice + mdPrice * 0.1)
+delta = greeks['delta'] 
+gamma = greeks['theta']
+theta = abs(greeks['theta'])
+theta = 1.00
+buy_premium = data['ask'][0]
+mdPrice = data['underlyingPrice'][0]
+print(mdPrice)
+print(buy_premium)
+date = pd.Timestamp.today()
+x, y, z = options_algo.generate_data(buy_premium, delta, gamma, theta, date, mdPrice)
 
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# ax.scatter(x, y, z, c=z, cmap='viridis')
+ax.plot_trisurf(x, y, z, cmap='viridis', edgecolor='none')
+
+ax.set_xlabel('Time')
+ax.set_ylabel('Price')
+ax.set_zlabel('New Premium')
+
+plt.show()
