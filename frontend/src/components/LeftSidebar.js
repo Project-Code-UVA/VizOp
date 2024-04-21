@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from 'react';
 import './LeftSidebar.css';
-import Button from "react-bootstrap/Button";
 
 function LeftSidebar({setGraphData}) {
   const [ticker, setTicker] = useState('');
@@ -99,16 +98,16 @@ function LeftSidebar({setGraphData}) {
 
   return (
     
-    <div className="left-sidebar"  class = "bg-light">
+    <div className="left-sidebar"  class = "bg-light bg-gradient">
       <div className="ticker-container">
         <div className="ticker-label-container">
           <input type="text" id="ticker" name="ticker" placeholder="Enter ticker" onChange={handleTickerChange}/>
-          <button className="submit-button" class = "badge-pill" onClick={handleLoadChainClick}>Load Chain</button>
+          <button className="submit-button" class = "badge-pill" id = "load-chain" onClick={handleLoadChainClick}>Load Chain</button>
         </div>
 
         <div className="side-container">
-          <button className='call-button' onClick={() => handleOptionTypeChange('call')}>Call</button>
-          <button className='put-button' onClick={() => handleOptionTypeChange('put')}>Put</button>
+          <button data-bs-toggle="tooltip" data-bs-placement="top" title="Purchase stock at strike price by expiration date" className='call-button' onClick={() => handleOptionTypeChange('call')}>Call</button>
+          <button data-toggle="tooltip" data-placement="top" title="Sell stock at strike price by expiration date" className='put-button' onClick={() => handleOptionTypeChange('put')}>Put</button>
         </div>
       </div>
 

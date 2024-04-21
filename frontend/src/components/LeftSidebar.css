@@ -8,6 +8,11 @@
     
 }
 
+#ticker{
+    /* margin-bottom: 20px; */
+    margin-top: 20px;
+}
+
 .ticker-label-container {
     display: flex;
     flex-direction: row;
@@ -124,6 +129,11 @@
 #expiration-label {
     color: black;
     font-size: 1.2em;
+}
+
+#load-chain {
+    /* margin-bottom: 20px; */
+    margin-top: 20px;
 }
 
 #expiration-dropdown {
