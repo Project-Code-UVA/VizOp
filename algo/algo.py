@@ -1,11 +1,12 @@
-import requests, format_date, yfinance as yf
+import requests, yfinance as yf
 import options_algo
 import pandas as pd
 
 #compare prices of ticker from yfinance and MarketData
 ## !--- NEED TO GET TOKEN FOR TICKERS OTHER THAN AAPL ---! ##
 
-tickers = ['AAPL'] 
+tickers = ['AAPL', 'TSLA']
+token = 'token c1lQX2NFT1pWdFFReHF1V0tydk1QYU1pOExnZ1RpOWsybDJaYkRYQktROD0'
 
 for ticker in tickers:
     # Get price and ticker from MarketData
@@ -14,35 +15,36 @@ for ticker in tickers:
     # print(f'\nTicker: {mdQuote["symbol"][0]}')
     # mdPrice = mdQuote["last"][0]
 
-    response = requests.request("GET", live_price_url)
+    response = requests.request("GET", live_price_url, headers={'Authorization': token})
     mdPrice = response.json()['ask'][0]
 
 #Get option contract data
-url = "https://api.marketdata.app/v1/options/quotes/AAPL250117C00150000/"
+# url = "https://api.marketdata.app/v1/options/quotes/AAPL250117C00150000/"
+url = "https://api.marketdata.app/v1/options/quotes/TSLA240426C00133000/"
 
-response = requests.request("GET", url)
+response = requests.request("GET", url, headers={'Authorization': token})
 data = response.json()
 
-if response.status_code == 200:
-    data = response.json()
-    if data.get("s") == "ok":    # Check if the response is valid based on the 's' field in JSON
+# if response.status_code == 200:
+data = response.json()
+if data.get("s") == "ok":    # Check if the response is valid based on the 's' field in JSON
 
-        option_type = data["side"][0] # Call or Put
-        strike = data['strike'][0] # Strike price of contract
+    option_type = data["side"][0] # Call or Put
+    strike = data['strike'][0] # Strike price of contract
 
-        greeks = { # Delta, Gamma, Theta, Vega, Rho
-            "delta": data["delta"][0],
-            "gamma": data["gamma"][0],
-            "theta": data["theta"][0],
-            "vega": data["vega"][0],
-            "rho": data["rho"][0]
-        }
+    greeks = { # Delta, Gamma, Theta, Vega, Rho
+        "delta": data["delta"][0],
+        "gamma": data["gamma"][0],
+        "theta": data["theta"][0],
+        "vega": data["vega"][0],
+        "rho": data["rho"][0]
+    }
 
-        print("Raw JSON Data:")
-        print(data)
+    print("Raw JSON Data:")
+    print(data)
 
-    else:
-        print("Invalid response.")
+    # else:
+    #     print("Invalid response.")
     
 else:
     print("Failed to retrieve data. Status code:", response.status_code)
